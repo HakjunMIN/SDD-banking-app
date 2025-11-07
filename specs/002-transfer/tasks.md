@@ -24,11 +24,11 @@
 
 **목적**: 프로젝트 초기화 및 기본 구조
 
-- [ ] T001 프로젝트 구조 생성 및 의존성 확인
-- [ ] T002 [P] 백엔드 새 모델 파일 생성 (transfer.py, virtual_bank.py)
-- [ ] T003 [P] 프론트엔드 새 컴포넌트 디렉터리 구조 생성
-- [ ] T004 [P] 새 API 라우터 파일 생성 (backend/src/api/transfer.py)
-- [ ] T005 [P] 새 서비스 파일 생성 (backend/src/services/transfer_service.py, bank_interface.py)
+- [x] T001 프로젝트 구조 생성 및 의존성 확인
+- [x] T002 [P] 백엔드 새 모델 파일 생성 (transfer.py, virtual_bank.py)
+- [x] T003 [P] 프론트엔드 새 컴포넌트 디렉터리 구조 생성
+- [x] T004 [P] 새 API 라우터 파일 생성 (backend/src/api/transfer.py)
+- [x] T005 [P] 새 서비스 파일 생성 (backend/src/services/transfer_service.py, bank_interface.py)
 
 ---
 
