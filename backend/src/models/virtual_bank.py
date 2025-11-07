@@ -5,7 +5,7 @@ SQLAlchemy ORM models for virtual bank interfaces
 
 from sqlalchemy import Column, Integer, String, Text, Boolean
 from sqlalchemy.orm import relationship
-from ..database import Base
+from ..database.connection import Base
 
 
 class VirtualBank(Base):

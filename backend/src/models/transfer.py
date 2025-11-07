@@ -6,7 +6,7 @@ SQLAlchemy ORM models for transfer functionality
 from sqlalchemy import Column, Integer, String, Float, DateTime, Text, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from ..database import Base
+from ..database.connection import Base
 
 
 class Transfer(Base):
