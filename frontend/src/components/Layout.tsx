@@ -16,6 +16,12 @@ export function Layout() {
               >
                 거래 내역
               </Link>
+              <Link 
+                to="/transfer" 
+                className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+              >
+                이체
+              </Link>
             </nav>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom'
 import { TransactionHistory } from '../pages/TransactionHistory'
 import TransactionsPage from '../pages/TransactionsPage'
+import TransferPage from '../pages/TransferPage'
 
 // Define application routes
 export const routes: RouteObject[] = [
@@ -21,6 +22,10 @@ export const routes: RouteObject[] = [
     path: '/legacy-transactions',
     element: <TransactionHistory />,
   },
+  {
+    path: '/transfer',
+    element: <TransferPage />,
+  },
   // Future routes can be added here
   // {
   //   path: '/dashboard',
@@ -37,6 +42,7 @@ export const ROUTE_PATHS = {
   HOME: '/',
   TRANSACTIONS: '/transactions',
   TRANSACTION_BY_ACCOUNT: '/transactions/:accountId',
+  TRANSFER: '/transfer',
 } as const
 
 // Helper function to build parametric routes
