@@ -36,6 +36,8 @@ async def create_transfer(
         HTTPException: 400 for validation errors, 500 for server errors
     """
     try:
+        print(f"Received transfer request: {transfer_data}")
+        print(f"Transfer data dict: {transfer_data.dict()}")
         # Determine transfer type based on to_bank_id
         if transfer_data.to_bank_id is None:
             # Internal transfer (same bank)

@@ -40,7 +40,6 @@ export interface TransferRequest {
   to_bank_id?: number;  // Optional for internal transfers
   amount: number;
   description?: string;
-  transfer_type: TransferType;
 }
 
 // Transfer response interface

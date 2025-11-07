@@ -18,7 +18,7 @@ import {
 } from '../types/transfer';
 
 // API base configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -92,10 +92,12 @@ export class TransferAPIService {
    */
   static async createTransfer(transferData: TransferRequest): Promise<Transfer> {
     try {
+      console.log('Sending transfer request:', transferData);
       const response: AxiosResponse<TransferResponse> = await apiClient.post(
         '/api/v1/transfers',
         transferData
       );
+      console.log('Transfer response:', response.data);
       return response.data.data;
     } catch (error) {
       console.error('Create transfer error:', error);
@@ -246,8 +248,7 @@ export const createInternalTransfer = async (
     from_account_id: fromAccountId,
     to_account_number: toAccountNumber,
     amount,
-    description,
-    transfer_type: 'INTERNAL' as any
+    description
   });
 };
 
@@ -266,8 +267,7 @@ export const createExternalTransfer = async (
     to_account_number: toAccountNumber,
     to_bank_id: toBankId,
     amount,
-    description,
-    transfer_type: 'EXTERNAL' as any
+    description
   });
 };
 

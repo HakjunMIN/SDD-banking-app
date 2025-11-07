@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Transfer, TransferRequest, TransferType } from '../types/transfer';
+import { Transfer, TransferRequest } from '../types/transfer';
 
 interface TransferFormProps {
   /** Current user's accounts for selection */
@@ -110,7 +110,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({
         to_account_number: formData.to_account_number.trim(),
         amount: parseFloat(formData.amount),
         description: formData.description.trim() || undefined,
-        transfer_type: TransferType.INTERNAL
+        to_bank_id: undefined  // undefined for internal transfers
       };
 
       const transfer = await onSubmit(transferRequest);

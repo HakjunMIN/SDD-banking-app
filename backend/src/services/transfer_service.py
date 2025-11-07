@@ -39,6 +39,7 @@ class TransferService:
             RuntimeError: If transfer execution fails
         """
         try:
+            print(f"Creating internal transfer: from_account_id={from_account_id}, to_account_number={to_account_number}, amount={amount}, description={description}")
             # Validate amount
             if amount <= 0:
                 raise ValueError("Transfer amount must be positive")
@@ -270,11 +271,11 @@ class TransferService:
             if not account:
                 raise ValueError("Account not found for transaction record")
             
-            # Create transaction record for the sender
+            # Create transaction record for the sender (withdrawal)
             transaction = Transaction(
                 account_id=transfer.from_account_id,
-                transaction_type="transfer",
-                amount=-transfer.amount,  # Negative for outgoing transfer
+                transaction_type="withdrawal",
+                amount=transfer.amount,  # Positive amount with withdrawal type
                 description=f"Transfer to {transfer.to_account_number}" + 
                           (f": {transfer.description}" if transfer.description else ""),
                 recipient_account=transfer.to_account_number,
@@ -298,7 +299,7 @@ class TransferService:
                 if to_account:
                     recipient_transaction = Transaction(
                         account_id=to_account.id,
-                        transaction_type="transfer",
+                        transaction_type="deposit",
                         amount=transfer.amount,  # Positive for incoming transfer
                         description=f"Transfer from {account.account_number}" + 
                                   (f": {transfer.description}" if transfer.description else ""),
