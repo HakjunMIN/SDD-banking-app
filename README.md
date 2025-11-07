@@ -4,81 +4,52 @@
 
 이 뱅킹 앱은 **Speckit 기반 Specification-Driven Development (SDD)** 방식으로 개발된 프로토타입 애플리케이션입니다. 사용자가 거래내역을 조회하고 계좌간 이체를 수행할 수 있는 기본적인 뱅킹 기능을 제공합니다.
 
-## 기술 스택
-
-### Backend
-- **Python 3.11+** with FastAPI
-- **SQLAlchemy** ORM
-- **SQLite** 데이터베이스 (프로토타입용)
-- **Uvicorn** ASGI 서버
-
-### Frontend  
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **Vite** build tool
-- **Axios** HTTP client
-
 ## Speckit SDD 개발 방식
 
 이 프로젝트는 명세 기반 개발(SDD) 방법론을 활용하여 체계적으로 구현되었습니다:
 
-### 1. 기능 명세 정의 (`specs/` 디렉터리)
-```
-specs/
-├── 001-transaction-history/    # 거래내역 조회 기능
-│   ├── feature.md             # 기능 상세 명세
-│   └── tasks.md              # 구현 태스크 리스트
-└── 002-transfer/             # 계좌이체 기능  
-    ├── feature.md            # 기능 상세 명세
-    └── tasks.md             # 구현 태스크 리스트
-```
+### 1. 기능 명세 정의 과정
+1. **사용자 요구사항 분석**: 기능별로 브랜치 생성 (`001-transaction-history`, `002-transfer`)
+2. **명세서 작성**: `spec.md`에 사용자 스토리와 승인 시나리오 정의
+3. **기술 계획**: `plan.md`에 아키텍처와 구현 방향 설계
+4. **태스크 분해**: `tasks.md`에 Phase별 구현 태스크 리스트 작성
+5. **데이터 모델링**: `data-model.md`에 필요한 데이터 구조 정의
 
 ### 2. 단계별 구현
 각 기능은 Phase별로 구분되어 체계적으로 개발:
-
-- **Phase 1**: 기본 인프라 및 API 설정
-- **Phase 2**: 거래내역 조회 기능
-- **Phase 3**: 내부 계좌간 이체 기능 (현재 완료)
-- **Phase 4**: 외부 은행간 이체 기능 (향후 계획)
-- **Phase 5**: 이체 확인 및 승인 기능 (향후 계획)
-
-## 현재 구현된 기능
-
-### ✅ 거래내역 조회 (Phase 2)
-- 계좌별 거래내역 조회
-- 날짜 범위 필터링
-- 거래 유형별 필터링
-- 페이지네이션 지원
-
-### ✅ 계좌간 이체 (Phase 3)  
-- 같은 은행 내 계좌간 실시간 이체
-- 잔액 검증 및 한도 확인
-- 이체 내역 자동 기록
-- 한국어 UI 및 오류 메시지
+- **Phase 1**: 프로젝트 설정 및 기본 구조
+- **Phase 2**: 기반 인프라 (데이터베이스, 모델, 유틸리티)
+- **Phase 3**: 사용자 스토리별 핵심 기능 구현
+- **Phase 4**: 고급 기능 및 통합 테스트
+- **Phase 5**: UI/UX 개선 및 최적화
 
 ## Speckit 사용 예시
 
-### 1. 기능 명세서 예시 (`specs/002-transfer/feature.md`)
+### 1. 기능 명세서 예시 (`specs/002-transfer/spec.md`)
 
 ```markdown
-# User Story 1 - 같은 은행 내 계좌간 이체
+# 기능 명세서: 계좌 이체 기능
 
-## 사용자 스토리
-고객으로서, 나는 같은 은행의 다른 계좌로 돈을 이체하고 싶다. 
+**Feature Branch**: `002-transfer`  
+**Created**: 2025-11-07  
+**Status**: Draft  
 
-## 수용 조건
-1. 출금 계좌를 선택할 수 있어야 함
-2. 입금 계좌번호를 입력할 수 있어야 함
-3. 이체 금액을 입력할 수 있어야 함
-4. 이체 설명을 선택적으로 입력할 수 있어야 함
-5. 잔액이 충분한지 확인해야 함
-6. 이체가 즉시 처리되어야 함
+## 사용자 시나리오 및 테스트
 
-## 기술적 요구사항
-- 실시간 잔액 검증
-- 트랜잭션 무결성 보장
-- 이체 내역 자동 기록
-- 오류 처리 및 사용자 피드백
+### 사용자 스토리 1 - 같은 은행 내 계좌간 이체 (우선순위: P1)
+
+사용자가 자신의 계좌에서 같은 은행의 다른 계좌로 이체를 할 수 있습니다. 
+수취인 계좌번호, 이체금액, 받는분 성명을 입력하고 이체를 실행합니다. 
+이체 완료 후 거래 내역에 출금 기록이 자동으로 추가됩니다.
+
+**승인 시나리오**:
+1. **Given** 사용자가 이체 페이지에 접속했을 때, 
+   **When** 수취인 계좌번호, 이체금액, 받는분 성명을 입력하고 이체 버튼을 클릭하면, 
+   **Then** 이체가 성공적으로 처리되고 확인 메시지가 표시됩니다.
+
+2. **Given** 이체가 완료된 상태에서, 
+   **When** 거래 내역 페이지를 확인하면, 
+   **Then** 해당 이체 건이 출금 거래로 기록되어 있습니다.
 ```
 
 ### 2. 태스크 리스트 예시 (`specs/002-transfer/tasks.md`)
@@ -86,23 +57,47 @@ specs/
 ```markdown
 ## Phase 3: User Story 1 - 같은 은행 내 계좌간 이체
 
-### Backend Tasks
-- [x] T016: TransferService에 내부 이체 로직 구현
-- [x] T017: Transfer API 엔드포인트 생성 (POST /transfers)
-- [x] T018: Transfer 조회 API 구현 (GET /transfers)
-- [x] T019: 이체 검증 로직 구현
-- [x] T020: 트랜잭션 처리 및 계좌 잔액 업데이트
-- [x] T021: 오류 처리 및 예외 상황 대응
+**목적**: 내부 계좌간 이체 기능 구현
 
-### Frontend Tasks  
-- [x] T022: TransferForm 컴포넌트 구현
-- [x] T023: AccountSelector 컴포넌트 구현
-- [x] T024: useTransfer 훅 구현
-- [x] T025: TransferPage UI 구현
-- [x] T026: 이체 성공/실패 처리
+- [x] T016 TransferService 내부 이체 로직 구현 in backend/src/services/transfer_service.py
+- [x] T017 Transfer API 엔드포인트 (POST) in backend/src/api/transfer.py  
+- [x] T018 Transfer 조회 API 구현 (GET) in backend/src/api/transfer.py
+- [x] T019 [P] 이체 검증 로직 구현 in backend/src/services/transfer_service.py
+- [x] T020 [P] 트랜잭션 처리 및 계좌 잔액 업데이트 in backend/src/services/transfer_service.py
+- [x] T021 [P] 오류 처리 및 예외 상황 대응 in backend/src/api/transfer.py
+
+### Frontend Tasks
+- [x] T022 [P] TransferForm 컴포넌트 구현 in frontend/src/components/TransferForm.tsx
+- [x] T023 [P] AccountSelector 컴포넌트 구현 in frontend/src/components/AccountSelector.tsx
+- [x] T024 [P] useTransfer 훅 구현 in frontend/src/hooks/useTransfer.ts
+- [x] T025 TransferPage UI 구현 in frontend/src/pages/TransferPage.tsx
+- [x] T026 [P] 이체 성공/실패 처리 in frontend/src/pages/TransferPage.tsx
 
 ### Integration Tasks
-- [x] T029: 라우팅 설정 및 네비게이션 추가
+- [x] T029 라우팅 설정 및 네비게이션 추가 in frontend/src/routes/index.tsx
+```
+
+### 3. Speckit 디렉터리 구조 (`specs/`)
+
+```
+specs/
+├── 001-transaction-history/    # 거래내역 조회 기능
+│   ├── spec.md                # 기능 명세서 (사용자 스토리, 승인 시나리오)
+│   ├── tasks.md               # 구현 태스크 리스트
+│   ├── plan.md                # 기술 계획 및 아키텍처
+│   ├── data-model.md          # 데이터 모델 설계
+│   ├── quickstart.md          # 빠른 시작 가이드
+│   ├── research.md            # 기술 조사 및 참고자료
+│   └── contracts/             # API 계약서 디렉터리
+└── 002-transfer/              # 계좌이체 기능
+    ├── spec.md                # 기능 명세서
+    ├── tasks.md               # 구현 태스크 리스트  
+    ├── plan.md                # 기술 계획
+    ├── data-model.md          # 데이터 모델
+    ├── quickstart.md          # 빠른 시작 가이드
+    ├── research.md            # 기술 조사
+    ├── contracts/             # API 계약서
+    └── checklists/            # 체크리스트
 ```
 
 ## 프로젝트 구조
@@ -167,15 +162,4 @@ npm run dev
 
 ## 기여하기
 
-이 프로젝트는 Speckit SDD 방식의 실습을 목적으로 합니다. 새로운 기능 추가 시:
-
-1. `specs/` 디렉터리에 기능 명세서 작성
-2. `tasks.md`에 구현 태스크 정의  
-3. Phase별로 단계적 구현
-4. 각 태스크 완료 시 체크박스 업데이트
-
----
-
-**개발 방식**: Speckit 기반 SDD (Specification-Driven Development)  
-**개발 기간**: 2025년 11월  
-**개발자**: AI Assistant & Human Collaboration
+이 프로젝트는 Speckit SDD 방식의 실습을 목적으로 합니다. 
