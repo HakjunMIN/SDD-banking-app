@@ -54,7 +54,7 @@ apiClient.interceptors.response.use(
       // Server responded with error status
       const errorData: ApiErrorResponse = {
         error: error.response.data.error || 'API Error',
-        message: error.response.data.message || 'An error occurred',
+        message: error.response.data.detail || error.response.data.message || 'An error occurred',
         details: error.response.data.details,
         success: false
       };

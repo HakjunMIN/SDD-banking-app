@@ -127,6 +127,12 @@ export const TransferForm: React.FC<TransferFormProps> = ({
       
     } catch (err: any) {
       console.error('Transfer submission error:', err);
+      console.log('Error object details:', {
+        message: err?.message,
+        error: err?.error,
+        details: err?.details,
+        fullObject: err
+      });
       
       // Handle specific error messages
       let errorMessage = 'Failed to process transfer. Please try again.';
