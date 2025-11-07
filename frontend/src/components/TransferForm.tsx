@@ -66,8 +66,8 @@ export const TransferForm: React.FC<TransferFormProps> = ({
     // Validate to account number
     if (!formData.to_account_number.trim()) {
       newErrors.to_account_number = 'Please enter destination account number';
-    } else if (!/^\d{10,20}$/.test(formData.to_account_number.trim())) {
-      newErrors.to_account_number = 'Account number must be 10-20 digits';
+    } else if (!/^[\d-]{10,20}$/.test(formData.to_account_number.trim())) {
+      newErrors.to_account_number = 'Account number must be 10-20 characters (numbers and hyphens allowed)';
     }
 
     // Check if not transferring to same account
@@ -157,10 +157,32 @@ export const TransferForm: React.FC<TransferFormProps> = ({
     }
   };
 
+  // Format account number with hyphens
+  const formatAccountNumber = (value: string): string => {
+    // Remove all non-numeric characters
+    const digitsOnly = value.replace(/\D/g, '');
+    
+    // Add hyphens: xxxx-xxxx-xxxx format
+    if (digitsOnly.length <= 4) {
+      return digitsOnly;
+    } else if (digitsOnly.length <= 8) {
+      return `${digitsOnly.slice(0, 4)}-${digitsOnly.slice(4)}`;
+    } else {
+      return `${digitsOnly.slice(0, 4)}-${digitsOnly.slice(4, 8)}-${digitsOnly.slice(8, 12)}`;
+    }
+  };
+
   const handleInputChange = (field: keyof FormData, value: string | number | null) => {
+    let processedValue = value;
+    
+    // Apply special formatting for account number
+    if (field === 'to_account_number' && typeof value === 'string') {
+      processedValue = formatAccountNumber(value);
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: processedValue
     }));
     
     // Clear field-specific error when user starts typing
@@ -228,12 +250,12 @@ export const TransferForm: React.FC<TransferFormProps> = ({
             id="to_account_number"
             value={formData.to_account_number}
             onChange={(e) => handleInputChange('to_account_number', e.target.value)}
-            placeholder="계좌번호를 입력하세요 (숫자만)"
+            placeholder="계좌번호를 입력하세요 (예: 1001-2345-6789)"
             className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 ${
               errors.to_account_number ? 'border-red-500' : 'border-gray-300'
             }`}
             disabled={isLoading || isSubmitting}
-            maxLength={20}
+            maxLength={14}
           />
           {errors.to_account_number && (
             <p className="mt-1 text-sm text-red-600">{errors.to_account_number}</p>
