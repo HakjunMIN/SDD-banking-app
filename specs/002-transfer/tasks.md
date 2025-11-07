@@ -32,24 +32,24 @@
 
 ---
 
-## Phase 2: 기반 구조 (선행 필수)
+## Phase 2: 기반 구조 (선행 필수) ✅ COMPLETED
 
 **목적**: 모든 사용자 스토리 구현 전 완료되어야 하는 핵심 인프라
 
-**⚠️ CRITICAL**: 이 단계 완료 전까지 사용자 스토리 작업 불가
+**✅ COMPLETED**: 이 단계 완료됨 - 사용자 스토리 작업 시작 가능
 
-- [ ] T006 데이터베이스 마이그레이션: VirtualBank 테이블 생성 in backend/src/database/migrations/
-- [ ] T007 데이터베이스 마이그레이션: Transfer 테이블 생성 in backend/src/database/migrations/
-- [ ] T008 데이터베이스 마이그레이션: Account 테이블 이체 한도 필드 추가 in backend/src/database/migrations/
-- [ ] T009 데이터베이스 마이그레이션: Transaction 테이블 이체 관련 필드 추가 in backend/src/database/migrations/
-- [ ] T010 VirtualBank 모델 구현 in backend/src/models/virtual_bank.py
-- [ ] T011 Transfer 모델 구현 in backend/src/models/transfer.py
-- [ ] T012 [P] 가상 은행 초기 데이터 생성 스크립트 in backend/src/database/seed_banks.py
-- [ ] T013 [P] 입력 검증 유틸리티 구현 (계좌번호, 금액) in backend/src/utils/validators.py
-- [ ] T014 [P] Transfer 타입 정의 in frontend/src/types/transfer.ts
-- [ ] T015 [P] Transfer API 클라이언트 기본 구조 in frontend/src/services/transferAPI.ts
+- [x] T006 데이터베이스 마이그레이션: VirtualBank 테이블 생성 in backend/src/database/migrations/001_create_virtual_bank.py
+- [x] T007 데이터베이스 마이그레이션: Transfer 테이블 생성 in backend/src/database/migrations/002_create_transfer.py
+- [x] T008 데이터베이스 마이그레이션: Account 테이블 이체 한도 필드 추가 in backend/src/database/migrations/003_add_account_transfer_fields.py
+- [x] T009 데이터베이스 마이그레이션: Transaction 테이블 이체 관련 필드 추가 in backend/src/database/migrations/004_add_transaction_transfer_fields.py
+- [x] T010 VirtualBank 모델 구현 in backend/src/models/virtual_bank.py
+- [x] T011 Transfer 모델 구현 in backend/src/models/transfer.py
+- [x] T012 [P] 가상 은행 초기 데이터 생성 스크립트 in backend/src/database/seed_banks.py
+- [x] T013 [P] 입력 검증 유틸리티 구현 (계좌번호, 금액) in backend/src/utils/validators.py
+- [x] T014 [P] Transfer 타입 정의 in frontend/src/types/transfer.ts
+- [x] T015 [P] Transfer API 클라이언트 기본 구조 in frontend/src/services/transferAPI.ts
 
-**Checkpoint**: 기반 구조 완료 - 사용자 스토리 구현이 병렬로 시작 가능
+**✅ Checkpoint**: 기반 구조 완료 - 사용자 스토리 구현이 병렬로 시작 가능
 
 ---
 
@@ -61,26 +61,26 @@
 
 ### 백엔드 구현
 
-- [ ] T016 [US1] TransferService 핵심 로직 구현 (내부 이체) in backend/src/services/transfer_service.py
-- [ ] T017 [US1] 잔액 검증 로직 구현 in backend/src/services/transfer_service.py
-- [ ] T018 [US1] 거래 내역 자동 생성 로직 구현 in backend/src/services/transfer_service.py
-- [ ] T019 [US1] Transfer API 엔드포인트 구현 (POST /api/v1/transfers) in backend/src/api/transfer.py
-- [ ] T020 [US1] Transfer 내역 조회 API 구현 (GET /api/v1/transfers) in backend/src/api/transfer.py
-- [ ] T021 [US1] Transfer 상세 조회 API 구현 (GET /api/v1/transfers/{id}) in backend/src/api/transfer.py
+- [x] T016 [US1] TransferService 핵심 로직 구현 (내부 이체) in backend/src/services/transfer_service.py
+- [x] T017 [US1] 잔액 검증 로직 구현 in backend/src/services/transfer_service.py
+- [x] T018 [US1] 거래 내역 자동 생성 로직 구현 in backend/src/services/transfer_service.py
+- [x] T019 [US1] Transfer API 엔드포인트 구현 (POST /api/v1/transfers) in backend/src/api/transfer.py
+- [x] T020 [US1] Transfer 내역 조회 API 구현 (GET /api/v1/transfers) in backend/src/api/transfer.py
+- [x] T021 [US1] Transfer 상세 조회 API 구현 (GET /api/v1/transfers/{id}) in backend/src/api/transfer.py
 
 ### 프론트엔드 구현
 
-- [ ] T022 [US1] TransferForm 컴포넌트 구현 (내부 이체용) in frontend/src/components/TransferForm.tsx
-- [ ] T023 [US1] AccountSelector 컴포넌트 구현 in frontend/src/components/AccountSelector.tsx
-- [ ] T024 [US1] Transfer API 클라이언트 구현 (내부 이체) in frontend/src/services/transferAPI.ts
-- [ ] T025 [US1] useTransfer 훅 구현 (상태 관리) in frontend/src/hooks/useTransfer.ts
-- [ ] T026 [US1] TransferPage 구현 (기본 이체 페이지) in frontend/src/pages/TransferPage.tsx
+- [x] T022 [US1] TransferForm 컴포넌트 구현 (내부 이체용) in frontend/src/components/TransferForm.tsx
+- [x] T023 [US1] AccountSelector 컴포넌트 구현 in frontend/src/components/AccountSelector.tsx
+- [x] T024 [US1] Transfer API 클라이언트 구현 (내부 이체) in frontend/src/services/transferAPI.ts
+- [x] T025 [US1] useTransfer 훅 구현 (상태 관리) in frontend/src/hooks/useTransfer.ts
+- [x] T026 [US1] TransferPage 구현 (기본 이체 페이지) in frontend/src/pages/TransferPage.tsx
 
 ### 통합 및 테스트
 
 - [ ] T027 [US1] 내부 이체 통합 테스트 in backend/tests/integration/test_transfer_api.py
 - [ ] T028 [US1] TransferService 단위 테스트 in backend/tests/unit/test_transfer_service.py
-- [ ] T029 [US1] API 라우터에 transfer 엔드포인트 등록 in backend/src/main.py
+- [x] T029 [US1] API 라우터에 transfer 엔드포인트 등록 in backend/src/main.py
 
 **MVP 완료**: 기본 내부 이체 기능 동작
 

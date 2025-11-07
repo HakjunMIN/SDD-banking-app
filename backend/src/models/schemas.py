@@ -100,3 +100,52 @@ class CategoryResponse(CategoryBase):
     
     class Config:
         from_attributes = True
+
+
+# Transfer-related schemas
+class TransferBase(BaseModel):
+    """Base transfer schema"""
+    to_account_number: str = Field(..., min_length=1, max_length=20)
+    amount: float = Field(..., gt=0, le=1000000)  # Max 1M KRW
+    description: Optional[str] = Field(None, max_length=500)
+
+
+class TransferCreate(TransferBase):
+    """Schema for creating a new transfer"""
+    from_account_id: int = Field(..., gt=0)
+    to_bank_id: Optional[int] = Field(None, gt=0)  # None for internal transfers
+
+
+class TransferResponse(TransferBase):
+    """Schema for transfer API responses"""
+    id: int
+    from_account_id: int
+    to_bank_id: Optional[int] = None
+    status: str
+    transfer_type: str
+    reference_number: str
+    created_at: datetime
+    completed_at: Optional[datetime] = None
+    error_message: Optional[str] = None
+    
+    class Config:
+        from_attributes = True
+
+
+class BankResponse(BaseModel):
+    """Schema for bank API responses"""
+    id: int
+    name: str
+    code: str
+    description: Optional[str] = None
+    
+    class Config:
+        from_attributes = True
+
+
+class TransferValidation(BaseModel):
+    """Schema for transfer validation responses"""
+    is_valid: bool
+    errors: Optional[list[str]] = None
+    warnings: Optional[list[str]] = None
+    estimated_fee: Optional[float] = None

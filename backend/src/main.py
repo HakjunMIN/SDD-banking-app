@@ -11,6 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .api import transaction_router, account_router
+from .api.transfer import router as transfer_router
 from .middleware.cors import setup_middleware
 
 # Configure logging
@@ -115,6 +116,7 @@ async def startup_event():
 # Include API routers
 app.include_router(transaction_router, prefix="/api", tags=["transactions"])
 app.include_router(account_router, prefix="/api", tags=["accounts"])
+app.include_router(transfer_router, tags=["transfers"])
 
 @app.get("/")
 async def root():
