@@ -190,6 +190,29 @@ export const TransferPage: React.FC = () => {
               </div>
             )}
 
+            {/* Available Accounts */}
+            <div className="bg-blue-50 rounded-lg p-6 mb-6">
+              <h3 className="text-lg font-medium text-blue-900 mb-4">테스트용 계좌 목록</h3>
+              <div className="space-y-2 text-sm">
+                <div className="bg-white rounded-md p-3 border border-blue-200">
+                  <div className="font-medium text-blue-900">1001-2345-6789</div>
+                  <div className="text-blue-700">김철수 주계좌</div>
+                </div>
+                <div className="bg-white rounded-md p-3 border border-blue-200">
+                  <div className="font-medium text-blue-900">1002-3456-7890</div>
+                  <div className="text-blue-700">이영희 적금계좌</div>
+                </div>
+                <div className="bg-white rounded-md p-3 border border-blue-200">
+                  <div className="font-medium text-blue-900">1003-4567-8901</div>
+                  <div className="text-blue-700">박민수 투자계좌</div>
+                </div>
+                <div className="bg-white rounded-md p-3 border border-blue-200">
+                  <div className="font-medium text-blue-900">1004-5678-9012</div>
+                  <div className="text-blue-700">최지은 주계좌</div>
+                </div>
+              </div>
+            </div>
+
             {/* Help Info */}
             <div className="bg-gray-50 rounded-lg p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">도움말</h3>
@@ -200,7 +223,7 @@ export const TransferPage: React.FC = () => {
                 </div>
                 <div className="flex items-start space-x-2">
                   <div className="flex-shrink-0 w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>
-                  <p>계좌번호는 10-20자리 숫자로 입력해주세요</p>
+                  <p>위 테스트 계좌 중 하나를 선택해서 이체해보세요</p>
                 </div>
                 <div className="flex items-start space-x-2">
                   <div className="flex-shrink-0 w-1.5 h-1.5 bg-gray-400 rounded-full mt-2"></div>

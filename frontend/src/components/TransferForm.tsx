@@ -125,9 +125,27 @@ export const TransferForm: React.FC<TransferFormProps> = ({
       
       onSuccess?.(transfer);
       
-    } catch (err) {
+    } catch (err: any) {
       console.error('Transfer submission error:', err);
-      setErrors({ general: 'Failed to process transfer. Please try again.' });
+      
+      // Handle specific error messages
+      let errorMessage = 'Failed to process transfer. Please try again.';
+      
+      if (err?.message) {
+        if (err.message.includes('Destination account not found')) {
+          errorMessage = '입금 계좌번호를 찾을 수 없습니다. 계좌번호를 다시 확인해주세요.';
+        } else if (err.message.includes('Insufficient balance')) {
+          errorMessage = '잔액이 부족합니다. 이체 금액을 확인해주세요.';
+        } else if (err.message.includes('Transfer amount must be positive')) {
+          errorMessage = '이체 금액은 0보다 커야 합니다.';
+        } else if (err.message.includes('Transfer amount exceeds maximum limit')) {
+          errorMessage = '이체 금액이 최대 한도를 초과했습니다. (최대: 1,000,000원)';
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
+      setErrors({ general: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
