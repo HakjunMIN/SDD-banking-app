@@ -1,0 +1,545 @@
+openapi: 3.0.3
+info:
+  title: 뱅킹 앱 거래 내역 API
+  version: 1.0.0
+  description: |
+    입출금 내역 조회를 위한 RESTful API
+    
+    ## 주요 기능
+    - 거래 내역 목록 조회
+    - 거래 상세 정보 조회  
+    - 거래 유형별 필터링
+    - 기간별 거래 조회
+    
+    ## 인증
+    프로토타입 목적으로 인증이 제외됨
+    
+servers:
+  - url: http://localhost:8000/api
+    description: 개발 서버
+    
+paths:
+  /transactions:
+    get:
+      summary: 거래 내역 목록 조회
+      description: |
+        계좌의 거래 내역을 조회합니다. 
+        기본적으로 최신 거래부터 시간 역순으로 정렬됩니다.
+      parameters:
+        - name: account_id
+          in: query
+          description: 계좌 ID (현재 프로토타입에서는 기본값 1 사용)
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: type
+          in: query
+          description: 거래 유형 필터
+          required: false
+          schema:
+            type: string
+            enum: [DEPOSIT, WITHDRAWAL]
+            example: DEPOSIT
+        - name: from_date
+          in: query
+          description: 조회 시작 날짜 (YYYY-MM-DD 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: to_date
+          in: query
+          description: 조회 종료 날짜 (YYYY-MM-DD 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-12-31"
+        - name: limit
+          in: query
+          description: 조회할 거래 수 제한
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          description: 건너뛸 거래 수 (페이지네이션용)
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: 거래 내역 조회 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  account_info:
+                    $ref: '#/components/schemas/AccountSummary'
+              example:
+                data:
+                  - id: 1
+                    transaction_date: "2024-11-07T09:30:00Z"
+                    transaction_type: "DEPOSIT"
+                    amount: 3000000.00
+                    counterpart: "회사 급여"
+                    memo: "11월 급여"
+                    balance_after: 1500000.00
+                    reference_number: "TXN20241107001"
+                  - id: 2
+                    transaction_date: "2024-11-06T14:20:00Z"
+                    transaction_type: "WITHDRAWAL"
+                    amount: 45000.00
+                    counterpart: "온라인 쇼핑몰"
+                    memo: "생필품 구매"
+                    balance_after: -1500000.00
+                    reference_number: "TXN20241106002"
+                pagination:
+                  total_count: 50
+                  limit: 20
+                  offset: 0
+                  has_more: true
+                account_info:
+                  account_number: "1234-567-890123"
+                  account_name: "메인 통장"
+                  current_balance: 1500000.00
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /transactions/{transaction_id}:
+    get:
+      summary: 거래 상세 정보 조회
+      description: 특정 거래의 상세 정보를 조회합니다.
+      parameters:
+        - name: transaction_id
+          in: path
+          description: 조회할 거래의 고유 ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 거래 상세 정보 조회 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TransactionDetail'
+              example:
+                data:
+                  id: 1
+                  transaction_date: "2024-11-07T09:30:00Z"
+                  transaction_type: "DEPOSIT"
+                  amount: 3000000.00
+                  counterpart: "회사 급여"
+                  memo: "11월 급여"
+                  balance_after: 1500000.00
+                  balance_before: -1500000.00
+                  reference_number: "TXN20241107001"
+                  created_at: "2024-11-07T09:30:15Z"
+                  account:
+                    account_number: "1234-567-890123"
+                    account_name: "메인 통장"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /accounts/{account_id}:
+    get:
+      summary: 계좌 정보 조회
+      description: 계좌의 기본 정보와 현재 잔액을 조회합니다.
+      parameters:
+        - name: account_id
+          in: path
+          description: 조회할 계좌의 고유 ID
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 계좌 정보 조회 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Account'
+              example:
+                data:
+                  id: 1
+                  account_number: "1234-567-890123"
+                  account_name: "메인 통장"
+                  balance: 1500000.00
+                  created_at: "2024-01-01T09:00:00Z"
+                  updated_at: "2024-11-07T14:30:00Z"
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /transactions/summary:
+    get:
+      summary: 거래 요약 통계
+      description: |
+        지정된 기간 동안의 거래 통계를 조회합니다.
+        입금/출금 총액, 거래 건수 등을 제공합니다.
+      parameters:
+        - name: account_id
+          in: query
+          description: 계좌 ID
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: from_date
+          in: query
+          description: 통계 시작 날짜 (YYYY-MM-DD 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: to_date
+          in: query
+          description: 통계 종료 날짜 (YYYY-MM-DD 형식)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-12-31"
+      responses:
+        '200':
+          description: 거래 요약 통계 조회 성공
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/TransactionSummary'
+              example:
+                data:
+                  period:
+                    from_date: "2024-01-01"
+                    to_date: "2024-12-31"
+                  total_deposits:
+                    amount: 5000000.00
+                    count: 10
+                  total_withdrawals:
+                    amount: 3500000.00
+                    count: 35
+                  net_amount: 1500000.00
+                  balance_change: 1500000.00
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      description: 기본 거래 정보
+      properties:
+        id:
+          type: integer
+          description: 거래 고유 식별자
+          example: 1
+        transaction_date:
+          type: string
+          format: date-time
+          description: 거래 발생 일시 (ISO 8601 형식)
+          example: "2024-11-07T09:30:00Z"
+        transaction_type:
+          type: string
+          enum: [DEPOSIT, WITHDRAWAL]
+          description: 거래 유형
+          example: "DEPOSIT"
+        amount:
+          type: number
+          format: decimal
+          minimum: 0
+          description: 거래 금액 (원화, 항상 양수)
+          example: 3000000.00
+        counterpart:
+          type: string
+          maxLength: 200
+          description: 거래 상대방
+          example: "회사 급여"
+        memo:
+          type: string
+          maxLength: 500
+          nullable: true
+          description: 거래 메모 (선택사항)
+          example: "11월 급여"
+        balance_after:
+          type: number
+          format: decimal
+          description: 거래 후 잔액 (원화)
+          example: 1500000.00
+        reference_number:
+          type: string
+          maxLength: 50
+          nullable: true
+          description: 거래 참조번호
+          example: "TXN20241107001"
+      required:
+        - id
+        - transaction_date
+        - transaction_type
+        - amount
+        - counterpart
+        - balance_after
+
+    TransactionDetail:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - type: object
+          properties:
+            balance_before:
+              type: number
+              format: decimal
+              description: 거래 전 잔액 (원화)
+              example: -1500000.00
+            created_at:
+              type: string
+              format: date-time
+              description: 레코드 생성 일시
+              example: "2024-11-07T09:30:15Z"
+            account:
+              $ref: '#/components/schemas/AccountSummary'
+          required:
+            - balance_before
+            - created_at
+            - account
+
+    Account:
+      type: object
+      description: 계좌 정보
+      properties:
+        id:
+          type: integer
+          description: 계좌 고유 식별자
+          example: 1
+        account_number:
+          type: string
+          maxLength: 20
+          description: 계좌번호
+          example: "1234-567-890123"
+        account_name:
+          type: string
+          maxLength: 100
+          description: 계좌 별칭
+          example: "메인 통장"
+        balance:
+          type: number
+          format: decimal
+          description: 현재 잔액 (원화)
+          example: 1500000.00
+        created_at:
+          type: string
+          format: date-time
+          description: 계좌 생성 일시
+          example: "2024-01-01T09:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: 최종 수정 일시
+          example: "2024-11-07T14:30:00Z"
+      required:
+        - id
+        - account_number
+        - account_name
+        - balance
+
+    AccountSummary:
+      type: object
+      description: 계좌 요약 정보
+      properties:
+        account_number:
+          type: string
+          description: 계좌번호
+          example: "1234-567-890123"
+        account_name:
+          type: string
+          description: 계좌 별칭
+          example: "메인 통장"
+        current_balance:
+          type: number
+          format: decimal
+          description: 현재 잔액 (원화)
+          example: 1500000.00
+      required:
+        - account_number
+        - account_name
+        - current_balance
+
+    TransactionSummary:
+      type: object
+      description: 거래 요약 통계
+      properties:
+        period:
+          type: object
+          properties:
+            from_date:
+              type: string
+              format: date
+              description: 통계 시작 날짜
+            to_date:
+              type: string
+              format: date
+              description: 통계 종료 날짜
+          required:
+            - from_date
+            - to_date
+        total_deposits:
+          type: object
+          properties:
+            amount:
+              type: number
+              format: decimal
+              description: 총 입금액
+            count:
+              type: integer
+              description: 입금 거래 건수
+          required:
+            - amount
+            - count
+        total_withdrawals:
+          type: object
+          properties:
+            amount:
+              type: number
+              format: decimal
+              description: 총 출금액
+            count:
+              type: integer
+              description: 출금 거래 건수
+          required:
+            - amount
+            - count
+        net_amount:
+          type: number
+          format: decimal
+          description: 순 거래액 (입금 - 출금)
+        balance_change:
+          type: number
+          format: decimal
+          description: 잔액 변동액
+      required:
+        - period
+        - total_deposits
+        - total_withdrawals
+        - net_amount
+
+    Pagination:
+      type: object
+      description: 페이지네이션 정보
+      properties:
+        total_count:
+          type: integer
+          description: 전체 거래 건수
+          example: 50
+        limit:
+          type: integer
+          description: 페이지당 조회 건수
+          example: 20
+        offset:
+          type: integer
+          description: 건너뛴 건수
+          example: 0
+        has_more:
+          type: boolean
+          description: 추가 데이터 존재 여부
+          example: true
+      required:
+        - total_count
+        - limit
+        - offset
+        - has_more
+
+    Error:
+      type: object
+      description: 오류 응답
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: 오류 코드
+              example: "INVALID_PARAMETER"
+            message:
+              type: string
+              description: 오류 메시지
+              example: "잘못된 매개변수입니다."
+            details:
+              type: string
+              description: 상세 오류 정보 (선택사항)
+              example: "from_date는 to_date보다 이전이어야 합니다."
+          required:
+            - code
+            - message
+      required:
+        - error
+
+  responses:
+    BadRequest:
+      description: 잘못된 요청
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "INVALID_PARAMETER"
+              message: "잘못된 매개변수입니다."
+              details: "transaction_type은 DEPOSIT 또는 WITHDRAWAL이어야 합니다."
+
+    NotFound:
+      description: 리소스를 찾을 수 없음
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "NOT_FOUND"
+              message: "요청한 리소스를 찾을 수 없습니다."
+              details: "거래 ID 999가 존재하지 않습니다."
+
+    InternalServerError:
+      description: 서버 내부 오류
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error:
+              code: "INTERNAL_SERVER_ERROR"
+              message: "서버 내부 오류가 발생했습니다."
+              details: "데이터베이스 연결에 실패했습니다."

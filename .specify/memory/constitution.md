@@ -1,50 +1,152 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+동기화 영향 보고서
+==================
+버전 변경: 1.0.0 → 1.1.0
+수정된 원칙: 해당 없음
+추가된 섹션:
+  - 문서화 언어 요구사항 (모든 스펙 문서 한글 작성 필수)
 
-## Core Principles
+변경 사유: 팀 협업 및 문서 가독성 향상을 위한 문서화 언어 정책 명시
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+템플릿 상태:
+  ✅ plan-template.md - 호환 (헌장 검사 섹션 정렬됨)
+  ✅ spec-template.md - 호환 (사용자 스토리 및 요구사항 구조 정렬됨)
+  ✅ tasks-template.md - 호환 (작업 분류가 원칙 반영함)
+  ✅ 모든 프롬프트 템플릿 - 검토 완료, 충돌 없음
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+후속 작업: 없음
+-->
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+# 모바일 뱅킹 앱 헌장
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+## 핵심 원칙
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### I. 보안 우선 (절대 원칙)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+모든 기능은 모든 계층에서 보안을 최우선으로 해야 합니다:
+- **인증 및 권한 부여**: 다중 인증(MFA) 필수; 안전한 토큰 처리를 통한 세션 관리; 역할 기반 접근 제어(RBAC) 적용
+- **데이터 보호**: 모든 민감 데이터(계좌번호, 잔액, PIN)는 업계 표준 알고리즘(AES-256, TLS 1.3+)을 사용하여 저장 시 및 전송 시 암호화 필수
+- **거래 무결성**: 모든 거래는 변경 불가능한 감사 추적 로그 필수; 실행 전 거래 서명 및 검증 필수
+- **입력 검증**: 모든 사용자 입력은 인젝션 공격(SQL, XSS 등) 방지를 위해 검증 및 정제 필수
+- **보안 통신**: API 호출은 인증서 피닝과 함께 HTTPS 사용 필수; URL이나 로그에 민감 데이터 포함 금지
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+**근거**: 금융 애플리케이션은 민감한 개인 및 금융 데이터를 다룹니다. 보안 침해는 금전적 손실, 법적 책임, 사용자 신뢰 상실로 이어질 수 있습니다. 보안은 나중에 추가할 수 없으며 처음부터 설계되어야 합니다.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### II. 테스트 우선 개발 (절대 원칙)
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+모든 기능에 TDD 방법론 필수:
+- **Red-Green-Refactor**: 테스트 작성 → 사용자 승인 → 테스트 실패 → 구현 → 테스트 통과 → 리팩토링
+- **테스트 커버리지 요구사항**: 최소 80% 코드 커버리지; 보안 핵심 경로(인증, 거래 처리, 암호화)는 100% 커버리지
+- **필수 테스트 유형**:
+  - 비즈니스 로직을 위한 단위 테스트
+  - API 엔드포인트 및 데이터베이스 작업을 위한 통합 테스트
+  - 핵심 사용자 여정(로그인, 거래 내역 조회 등)을 위한 종단간 테스트
+  - 인증 및 권한 부여 흐름을 위한 보안 테스트
+- **병합 전 테스트**: 모든 테스트는 코드 리뷰 전 통과 필수; 예외 없음
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+**근거**: 금융 애플리케이션은 높은 신뢰성이 필요합니다. 테스트 우선 개발은 버그를 조기에 발견하고, 요구사항 충족을 보장하며, 리팩토링을 위한 안전망을 제공합니다. 뱅킹 앱의 버그는 금전적 손실이나 규제 처벌로 이어질 수 있습니다.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### III. 사용자 프라이버시 및 규정 준수
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+모든 기능에 프라이버시와 규제 준수가 내재되어야 합니다:
+- **데이터 최소화**: 기능에 필요한 데이터만 수집; 모든 개인정보 수집은 정당화 필수
+- **프라이버시 바이 디자인**: 프라이버시 고려사항은 사양 단계에서 문서화 필수; 필수가 아닌 데이터 수집은 옵트인 방식
+- **규제 준수**: 해당 규정(GDPR, PSD2, 지역 금융 규정) 준수; 사양에 준수 조치 문서화
+- **사용자 권리**: 사용자의 데이터 접근, 수정, 삭제 권리 지원; 데이터 내보내기 기능 제공
+- **감사 로그**: 규정 준수 보고를 위한 포괄적 감사 로그 유지; 로그는 변조 방지 필수
+
+**근거**: 금융 서비스는 강력하게 규제됩니다. 규정 미준수는 벌금, 법적 조치, 운영 허가 상실로 이어질 수 있습니다. 사용자 프라이버시는 신뢰를 구축하며 법적으로 점점 더 의무화되고 있습니다.
+
+### IV. 모듈형 아키텍처
+
+기능은 독립적이고 조합 가능한 모듈로 개발되어야 합니다:
+- **명확한 경계**: 각 모듈은 명확하게 정의된 목적과 인터페이스를 가짐; 순환 의존성 금지
+- **API 우선 설계**: 모든 모듈은 잘 문서화된 API를 통해 기능 노출(백엔드는 REST/GraphQL, 모바일은 명확한 인터페이스)
+- **독립적 테스트**: 모듈은 의존성에 대한 목/스텁을 사용하여 독립적으로 테스트 가능해야 함
+- **재사용성**: 공통 기능(인증, 데이터 포맷팅, 오류 처리)은 공유 모듈로 추출 필수
+- **플랫폼 분리**: 비즈니스 로직(플랫폼 독립적)과 플랫폼별 코드(UI, 플랫폼 API) 간 명확한 분리
+
+**근거**: 모듈형 아키텍처는 병렬 개발, 쉬운 테스트, 더 나은 유지보수성을 가능하게 합니다. 모바일 뱅킹의 경우 기능 팀이 독립적으로 작업할 수 있게 하며, 비즈니스 로직을 공유하면서 플랫폼별 구현(iOS/Android)을 용이하게 합니다.
+
+### V. 성능 및 신뢰성
+
+애플리케이션은 사용자 신뢰를 위한 성능 기준을 충족해야 합니다:
+- **응답 시간**: API 응답 p95 < 500ms; UI 상호작용은 즉각적으로 느껴져야 함(< 100ms)
+- **오프라인 기능**: 핵심 기능(거래 내역 조회, 계좌 잔액)은 캐시된 데이터로 오프라인 작동 필수; 명확한 동기화 표시
+- **오류 처리**: 우아한 성능 저하; 사용자에게 원시 오류 노출 금지; 모든 오류는 디버깅을 위한 컨텍스트와 함께 로깅
+- **리소스 효율성**: 앱 크기 < 50MB; 메모리 사용량 < 200MB; 배터리 효율적인 백그라운드 작업
+- **가용성**: 백엔드 서비스 99.9% 가동 시간 목표; 복원력을 위한 재시도 로직 및 서킷 브레이커 구현
+
+**근거**: 사용자는 뱅킹 앱이 빠르고 항상 사용 가능하기를 기대합니다. 낮은 성능은 신뢰를 침식합니다. 오프라인 기능은 연결 상태가 좋지 않은 지역의 사용자에게 중요합니다. 리소스 효율성은 사용자 만족도와 앱 스토어 평가에 영향을 미칩니다.
+
+## 보안 요구사항
+
+**필수 보안 게이트** (모든 기능에 적용):
+
+1. **위협 모델링**: 사양 단계에서 완전한 위협 모델 문서화; 공격 벡터 및 완화 조치 식별
+2. **보안 검토**: 인증, 권한 부여, 데이터 처리 또는 외부 통신과 관련된 모든 코드 변경은 병합 전 보안 검토 필수
+3. **의존성 스캔**: 취약한 의존성에 대한 자동 스캔; 프로덕션에 심각 또는 높음 취약성 금지
+4. **침투 테스트**: 주요 기능은 출시 전 침투 테스트 필수
+5. **사고 대응**: 보안 사고 대응 절차 문서화; 정기적인 훈련 필수
+
+**보호 데이터 분류**:
+- **중요**: 계좌번호, 비밀번호, PIN, 생체 인증 데이터, 거래 상세 내역
+- **민감**: 사용자 이름, 이메일 주소, 전화번호, 주소, 잔액
+- **내부**: 세션 토큰, 사용자 설정, 앱 상태
+
+모든 중요 및 민감 데이터는 원칙 I에 정의된 암호화 및 접근 제어 요구사항을 따라야 합니다.
+
+## 개발 표준
+
+**품질 게이트** (병합 전 통과 필수):
+
+1. **헌장 준수**: PR 설명은 적용되는 원칙과 충족 방법을 문서화 필수
+2. **코드 리뷰**: 최소 1명의 승인 리뷰; 보안 핵심 변경사항은 2명의 리뷰 필요
+3. **테스트 통과**: 모든 테스트 통과; 커버리지 임계값 충족; 보안 테스트 건너뛰기 금지
+4. **정적 분석**: 린터, 포매터, 보안 스캐너가 심각한 문제 없이 통과
+5. **문서화**: API 변경사항 문서화; 사용자 대면 변경사항은 사용 예제 포함
+
+**워크플로 표준**:
+
+- **기능 브랜치**: 모든 작업은 main에서 기능 브랜치로; 명명 규칙: `###-feature-name`
+- **커밋 메시지**: 명확하고 설명적인 커밋; 이슈 번호 참조; conventional commits 형식 따르기
+- **점진적 개발**: 기능을 독립적으로 테스트 가능한 사용자 스토리로 분할(P1, P2, P3 우선순위); MVP 조기 제공
+- **지속적 통합**: 모든 푸시에 대한 자동 빌드 및 테스트; 리뷰를 위한 배포 미리보기
+
+**문서화 요구사항**:
+
+각 기능은 다음을 포함해야 합니다:
+- `spec.md`: 우선순위가 있는 사용자 스토리, 승인 기준, 요구사항
+- `plan.md`: 기술적 접근 방식, 아키텍처 결정, 복잡도 정당화
+- `data-model.md`: 데이터 엔티티, 관계, 보안 분류 (해당되는 경우)
+- `contracts/`: 요청/응답 예제가 포함된 API 사양 (해당되는 경우)
+- `tasks.md`: 사용자 스토리별 구현 작업 분류
+
+**문서화 언어**:
+- 모든 스펙 문서(spec.md, plan.md, data-model.md, tasks.md 등)는 **한글로 작성** 필수
+- 코드 내 주석 및 문서화 문자열(docstring)은 한글 권장
+- API 문서 및 기술 사양서는 한글 작성 필수
+- 예외: 코드 자체(변수명, 함수명, 클래스명)는 영어 사용
+
+## 거버넌스
+
+**개정 절차**:
+1. 근거 및 영향 분석과 함께 개정안 제안
+2. 팀과 검토; 기존 및 향후 기능에 대한 영향 논의
+3. 시맨틱 버저닝에 따른 버전 업데이트와 함께 헌장 업데이트:
+   - **MAJOR**: 원칙 제거 또는 하위 호환성 없는 변경
+   - **MINOR**: 새로운 원칙 또는 섹션 추가
+   - **PATCH**: 설명, 오타 수정, 비의미론적 개선
+4. 동일한 PR 내에서 종속 템플릿 및 문서 업데이트
+5. 기존 코드가 영향을 받는 경우 마이그레이션 계획 생성
+
+**준수 검증**:
+- 모든 PR은 PR 설명에서 해당 원칙 준수를 검증해야 함
+- 복잡도 위반은 plan.md의 "복잡도 추적" 섹션에서 정당화되어야 함
+- 원칙이 여전히 관련성이 있는지 확인하기 위한 연간 헌장 검토
+
+**권한**: 이 헌장은 모든 다른 개발 관행보다 우선합니다. 충돌이 발생하면 헌장이 우선합니다. 프로젝트 리더는 문서화된 시간이 중요한 상황에 대해 임시 예외를 허용할 권한이 있으며, 이는 출시 후 코드화되거나 수정되어야 합니다.
+
+**개발 지침**: 런타임 개발 지침 및 모범 사례는 `docs/` 디렉토리의 프로젝트 문서 및 플랫폼별 스타일 가이드를 참조하세요.
+
+**버전**: 1.1.0 | **비준**: 2025-11-07 | **최종 수정**: 2025-11-07
