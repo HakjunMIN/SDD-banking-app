@@ -53,8 +53,10 @@ export const TransferPage: React.FC = () => {
   }, [error, clearError]);
 
   const handleTransferSuccess = (transfer: Transfer) => {
+    console.log('Transfer success object:', transfer);
+    const referenceNumber = transfer?.reference_number || '알 수 없음';
     setSuccessMessage(
-      `이체가 성공적으로 완료되었습니다. 이체 번호: ${transfer.reference_number}`
+      `이체가 성공적으로 완료되었습니다. 이체 번호: ${referenceNumber}`
     );
     clearLastTransfer();
   };

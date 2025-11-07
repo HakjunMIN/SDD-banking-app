@@ -7,7 +7,6 @@ import axios, { AxiosResponse } from 'axios';
 import {
   Transfer,
   TransferRequest,
-  TransferResponse,
   TransferListResponse,
   BankListResponse,
   VirtualBank,
@@ -93,12 +92,12 @@ export class TransferAPIService {
   static async createTransfer(transferData: TransferRequest): Promise<Transfer> {
     try {
       console.log('Sending transfer request:', transferData);
-      const response: AxiosResponse<TransferResponse> = await apiClient.post(
+      const response: AxiosResponse<Transfer> = await apiClient.post(
         '/api/v1/transfers',
         transferData
       );
       console.log('Transfer response:', response.data);
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error('Create transfer error:', error);
       throw error;
@@ -132,10 +131,10 @@ export class TransferAPIService {
    */
   static async getTransfer(transferId: number): Promise<Transfer> {
     try {
-      const response: AxiosResponse<TransferResponse> = await apiClient.get(
+      const response: AxiosResponse<Transfer> = await apiClient.get(
         `/api/v1/transfers/${transferId}`
       );
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error('Get transfer error:', error);
       throw error;
