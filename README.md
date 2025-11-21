@@ -122,6 +122,101 @@ banking-app/
     └── 002-transfer/
 ```
 
+## Speckit 설치 및 사용법
+
+### Speckit 설치
+
+```bash
+npm install -g @speckit/cli
+```
+
+또는 프로젝트별로 설치:
+
+```bash
+npm install --save-dev @speckit/cli
+```
+
+### GitHub Copilot Chat에서 Speckit 사용하기
+
+프로젝트 디렉터리에서 AI assistant를 실행하면 `/speckit.*` 명령어를 사용할 수 있습니다.
+
+#### 1. 프로젝트 원칙 수립
+
+프로젝트의 핵심 원칙과 개발 가이드라인을 설정합니다.
+
+```
+/speckit.constitution Create principles focused on code quality, testing standards, user experience consistency, and performance requirements
+```
+
+#### 2. 기능 명세 작성
+
+구현하고자 하는 기능을 설명합니다. '무엇을', '왜'에 집중하고, 기술 스택은 나중에 결정합니다.
+
+```
+/speckit.specify Build an application that can help me organize my photos in separate photo albums. Albums are grouped by date and can be re-organized by dragging and dropping on the main page. Albums are never in other nested albums. Within each album, photos are previewed in a tile-like interface.
+```
+
+#### 3. 기술 구현 계획 생성
+
+기술 스택과 아키텍처 선택사항을 제공합니다.
+
+```
+/speckit.plan The application uses Vite with minimal number of libraries. Use vanilla HTML, CSS, and JavaScript as much as possible. Images are not uploaded anywhere and metadata is stored in a local SQLite database.
+```
+
+#### 4. 태스크 분해
+
+구현 계획을 실행 가능한 태스크 리스트로 분해합니다.
+
+```
+/speckit.tasks
+```
+
+#### 5. 구현 실행
+
+계획에 따라 모든 태스크를 실행하고 기능을 구현합니다.
+
+```
+/speckit.implement
+```
+
+### 실전 사용 예시 - 계좌 이체 기능
+
+#### 1단계: 기능 명세
+
+```
+/speckit.specify 사용자가 자신의 계좌에서 다른 계좌로 송금할 수 있는 기능을 만들고 싶습니다. 
+수취인 계좌번호, 이체금액, 받는분 성명을 입력받아 이체를 실행합니다.
+이체 완료 후 거래내역에 자동으로 기록됩니다.
+```
+
+#### 2단계: 기술 계획
+
+```
+/speckit.plan Backend는 Python FastAPI와 SQLAlchemy를 사용하고, 
+Frontend는 React 18과 TypeScript로 구현합니다.
+데이터베이스는 SQLite를 사용하며, 트랜잭션 안전성을 보장합니다.
+```
+
+#### 3단계: 태스크 생성 및 구현
+
+```
+/speckit.tasks
+
+/speckit.implement
+```
+
+### Speckit 명령어 참조
+
+| 명령어 | 설명 |
+|--------|------|
+| `/speckit.constitution` | 프로젝트 원칙 및 가이드라인 설정 |
+| `/speckit.specify` | 기능 명세서 작성 (요구사항 정의) |
+| `/speckit.plan` | 기술 구현 계획 수립 |
+| `/speckit.tasks` | 실행 가능한 태스크 리스트 생성 |
+| `/speckit.implement` | 태스크 기반 구현 실행 |
+| `/speckit.verify` | 명세 대비 구현 검증 |
+
 ## 개발 환경 설정
 
 ### Backend 실행
