@@ -36,7 +36,6 @@ MANIFEST
 
 # Python Virtual Environments
 .env
-.env.*
 .venv/
 venv/
 ENV/
